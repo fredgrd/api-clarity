@@ -1,0 +1,26 @@
+{
+  "name": "api-clarity",
+  "version": "1.0.0",
+  "description": "The backend for the ClarityCoach service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fredgrd/api-clarity.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fredgrd/api-clarity/issues"
+  },
+  "homepage": "https://github.com/fredgrd/api-clarity#readme",
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
