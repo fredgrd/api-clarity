@@ -133,10 +133,13 @@ export const signup = async (req: SignupRequest, res: Response) => {
     }
 
     // Set authToken cookie
+    const date = new Date();
+    date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
     res.cookie('authToken', authToken, {
       httpOnly: true,
       // secure: true,
       // domain: 'localhost:3000',
+      expires: date,
     });
 
     res.status(200).json({
