@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { log } from '../utils/logger';
 import { User } from '../database/models/user';
 import { ErrorMessage } from './error-message';
+import { signToken } from '../utils/token';
+import { SigninLink } from '../database/models/signin-link';
 
 interface SigninRequest extends Request {
   body: {
@@ -16,22 +18,33 @@ export const signin = async (req: SigninRequest, res: Response) => {
 
   log('auth-controller', 'signin', req.body);
 
+  // Performs the signin with either credentials or token (signin link)
   if (token) {
-    // TODO:
-    // Retrieve user wit token
-    // Disable token for future signups? At this point or later in the process?
-  } else if (email && password) {
-    const user = await User.findWithCredentials(email, password);
+    // Validate token
+    const userId = await SigninLink.validateToken(token);
+
+    if (!userId) {
+      res.status(401).send(ErrorMessage.Unauthorized);
+      return;
+    }
+
+    const user = await User.findWithId(userId);
 
     if (user) {
-      // RETURN THE USER
+      // Generate authToken
+      const authToken = signToken(user.id, user.email);
 
-      // TODO: Sign token
+      if (!authToken) {
+        res.status(500).send(ErrorMessage.Internal);
+        return;
+      }
 
-      // TODO: Set cookie
-
-      // TODO: Return user
-      // User might need to be sanitize
+      // Set authToken cookie
+      res.cookie('authToken', authToken, {
+        httpOnly: true,
+        // secure: true,
+        // domain: 'localhost:3000',
+      });
 
       res.status(200).json({
         id: user.id,
@@ -40,10 +53,43 @@ export const signin = async (req: SigninRequest, res: Response) => {
         surname: user.surname,
         fullname: user.fullName,
         gender: user.gender,
+        onboarding_step: user.onboarding_step
       });
     } else {
       log('auth-controller', 'signin', ErrorMessage.Internal);
-      res.status(400).send(ErrorMessage.Internal);
+      res.status(500).send(ErrorMessage.Internal);
+    }
+  } else if (email && password) {
+    const user = await User.findWithCredentials(email, password);
+
+    if (user) {
+      // Generate authToken
+      const authToken = signToken(user.id, user.email);
+
+      if (!authToken) {
+        res.status(500).send(ErrorMessage.Internal);
+        return;
+      }
+
+      // Set authToken cookie
+      res.cookie('authToken', authToken, {
+        httpOnly: true,
+        // secure: true,
+        // domain: 'localhost:3000',
+      });
+
+      res.status(200).json({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        surname: user.surname,
+        fullname: user.fullName,
+        gender: user.gender,
+        onboarding_step: user.onboarding_step
+      });
+    } else {
+      log('auth-controller', 'signin', ErrorMessage.Internal);
+      res.status(500).send(ErrorMessage.Internal);
     }
   } else {
     log('auth-controller', 'signin', ErrorMessage.MissingCredentials);
@@ -72,14 +118,20 @@ export const signup = async (req: SignupRequest, res: Response) => {
   const user = await User.createWithCredentials(email, password);
 
   if (user) {
-    // RETURN THE USER
+    // Generate authToken
+    const authToken = signToken(user.id, user.email);
 
-    // TODO: Sign token
+    if (!authToken) {
+      res.status(500).send(ErrorMessage.Internal);
+      return;
+    }
 
-    // TODO: Set cookie
-
-    // TODO: Return user
-    // User might need to be sanitized
+    // Set authToken cookie
+    res.cookie('authToken', authToken, {
+      httpOnly: true,
+      // secure: true,
+      // domain: 'localhost:3000',
+    });
 
     res.status(200).json({
       id: user.id,

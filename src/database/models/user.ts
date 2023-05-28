@@ -2,8 +2,8 @@ import {
   HydratedDocument,
   Model,
   MongooseError,
-  ObjectId,
   Schema,
+  Types,
   model,
 } from 'mongoose';
 import { hasher, verifyHash } from '../../utils/hasher';
@@ -38,6 +38,10 @@ interface UserModel extends Model<IUser, {}, IUserMethods> {
   findWithCredentials(
     email: string,
     password: string
+  ): Promise<HydratedDocument<IUser, IUserMethods> | null>;
+
+  findWithId(
+    userId: string | Types.ObjectId
   ): Promise<HydratedDocument<IUser, IUserMethods> | null>;
 }
 
@@ -98,7 +102,7 @@ UserSchema.static(
 // FindWithCredentials
 UserSchema.static(
   'findWithCredentials',
-  async function name(email: string, password: string) {
+  async function findWithCredentials(email: string, password: string) {
     try {
       const user: HydratedDocument<IUser, IUserMethods> = await this.findOne({
         email,
@@ -119,6 +123,21 @@ UserSchema.static(
   }
 );
 
-export const User = model<IUser, UserModel>('User', UserSchema);
+// FindWithId
+UserSchema.static(
+  'findWithId',
+  async function findWithId(userId: string | Types.ObjectId) {
+    try {
+      const user: HydratedDocument<IUser, IUserMethods> = await this.findById(
+        userId
+      ).orFail();
+      return user;
+    } catch (error) {
+      const mongooseError = error as MongooseError;
+      log('database/models/user', 'findWithId', mongooseError.message);
+      return null;
+    }
+  }
+);
 
-// Utils
+export const User = model<IUser, UserModel>('User', UserSchema);
