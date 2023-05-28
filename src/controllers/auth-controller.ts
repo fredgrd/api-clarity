@@ -40,10 +40,13 @@ export const signin = async (req: SigninRequest, res: Response) => {
       }
 
       // Set authToken cookie
+      const date = new Date();
+      date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
       res.cookie('authToken', authToken, {
         httpOnly: true,
         // secure: true,
         // domain: 'localhost:3000',
+        expires: date,
       });
 
       res.status(200).json({
@@ -53,7 +56,7 @@ export const signin = async (req: SigninRequest, res: Response) => {
         surname: user.surname,
         fullname: user.fullName,
         gender: user.gender,
-        onboarding_step: user.onboarding_step
+        onboarding_step: user.onboarding_step,
       });
     } else {
       log('auth-controller', 'signin', ErrorMessage.Internal);
@@ -72,10 +75,13 @@ export const signin = async (req: SigninRequest, res: Response) => {
       }
 
       // Set authToken cookie
+      const date = new Date();
+      date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
       res.cookie('authToken', authToken, {
         httpOnly: true,
         // secure: true,
         // domain: 'localhost:3000',
+        expires: date,
       });
 
       res.status(200).json({
@@ -85,7 +91,7 @@ export const signin = async (req: SigninRequest, res: Response) => {
         surname: user.surname,
         fullname: user.fullName,
         gender: user.gender,
-        onboarding_step: user.onboarding_step
+        onboarding_step: user.onboarding_step,
       });
     } else {
       log('auth-controller', 'signin', ErrorMessage.Internal);
