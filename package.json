@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fredgrd/api-clarity.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Federico B. Giordani",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/fredgrd/api-clarity/issues"
@@ -24,10 +24,15 @@
     "@types/cors": "^2.8.13",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.1",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^20.2.5",
+    "@types/supertest": "^2.0.12",
     "@types/uuid4": "^2.0.0",
+    "jest": "^29.5.0",
     "nodemon": "^2.0.22",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   },

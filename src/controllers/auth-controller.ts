@@ -24,7 +24,7 @@ export const signin = async (req: SigninRequest, res: Response) => {
     const userId = await SigninLink.validateToken(token);
 
     if (!userId) {
-      res.status(401).send(ErrorMessage.Unauthorized);
+      res.status(400).send(ErrorMessage.BadData);
       return;
     }
 
@@ -94,12 +94,12 @@ export const signin = async (req: SigninRequest, res: Response) => {
         onboarding_step: user.onboarding_step,
       });
     } else {
-      log('auth-controller', 'signin', ErrorMessage.Internal);
-      res.status(500).send(ErrorMessage.Internal);
+      log('auth-controller', 'signin', ErrorMessage.BadData);
+      res.status(400).send(ErrorMessage.BadData);
     }
   } else {
-    log('auth-controller', 'signin', ErrorMessage.MissingCredentials);
-    res.status(400).send(ErrorMessage.MissingCredentials);
+    log('auth-controller', 'signin', ErrorMessage.BadData);
+    res.status(400).send(ErrorMessage.BadData);
   }
 };
 
