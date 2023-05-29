@@ -116,8 +116,8 @@ export const signup = async (req: SignupRequest, res: Response) => {
   log('auth-controller', 'signup', req.body);
 
   if (!email || !password) {
-    log('auth-controller', 'signup', ErrorMessage.MissingCredentials);
-    res.status(400).send(ErrorMessage.MissingCredentials);
+    log('auth-controller', 'signup', ErrorMessage.BadData);
+    res.status(400).send(ErrorMessage.BadData);
     return;
   }
 
@@ -151,8 +151,8 @@ export const signup = async (req: SignupRequest, res: Response) => {
       gender: user.gender,
     });
   } else {
-    log('auth-controller', 'signup', ErrorMessage.Internal);
-    res.status(500).send(ErrorMessage.Internal);
+    log('auth-controller', 'signup', ErrorMessage.BadData);
+    res.status(400).send(ErrorMessage.BadData);
     return;
   }
 };
