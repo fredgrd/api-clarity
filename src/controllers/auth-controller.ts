@@ -24,7 +24,7 @@ export const signin = async (req: SigninRequest, res: Response) => {
     const userId = await SigninLink.validateToken(token);
 
     if (!userId) {
-      res.status(400).send(ErrorMessage.BadData);
+      res.status(400).send(ErrorMessage.InvalidToken);
       return;
     }
 

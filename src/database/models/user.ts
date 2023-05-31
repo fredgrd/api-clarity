@@ -23,6 +23,7 @@ enum OnboardingStep {
   CompleteProfile = 'CompleteProfile',
   MyersBriggs = 'MyersBriggs',
   BookAppointment = 'BookAppointment',
+  Complete = 'Complete',
 }
 
 interface IUserMethods {
